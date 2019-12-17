@@ -6,7 +6,6 @@ from selenium.webdriver import Chrome
 import re
 import  pandas as pd
 
-
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 import datetime as dt
@@ -52,7 +51,7 @@ count=0
 for it in asd:
     it.find_all({'id':'author-text'})
 for items in soup:
-    div=items.find_all('yt-formatted-string',attrs={'id':'content-text'})  #comment
+    div=items.find_all('yt-formatted-string',attrs={'class':'style-scope ytd-comment-renderer'})  #comment
     div2=items.find_all('span',attrs={'class':'style-scope ytd-comment-renderer'})
     for list2 in div2:
         if (list2.string != None) and (list2.string != 'VIEW'):
@@ -60,14 +59,10 @@ for items in soup:
             if(ccc != '•') and (ccc != ''):
                 cmt_ll.append([ccc])
     for lists in div:
-        if lists != None:
-            try:
-                cmt=lists.string
+        if (lists.string != None) and (lists.string != 'VIEW')and (lists.string!=''):
+            cmt=(lists.string.replace('\n',"")).strip()
+            if(cmt != ''):
                 cmtlist.append([cmt])
-            except TypeError as e:
-                pass
-            else:
-                pass
 
 casd={"comment" : cmtlist , "comment_id" : cmt_ll}
 print(casd)
@@ -75,6 +70,16 @@ for t in casd:
     print(t)
     print("----------------------------------------------------")
 
+#print(cmtlist)
+print(len(cmtlist))
+print(len(cmt_ll))
+
+for i in range(len(cmtlist)):
+    print(cmtlist[i])
+    print(cmt_ll[i])
+
+'''
 frame=pd.DataFrame(casd)
 print(frame)
-frame.to_csv("frame.csv",mode="w",encoding="utf-8-sig")
+frame.to_csv("frame2.csv",mode="w",encoding="utf-8-sig")
+'''
